@@ -19,9 +19,7 @@ public class ProductDtoMapper {
         List<Tags> tags = productDto.getTags().stream().map(tag -> {
             return Tags.of(tag.name());
         }).collect(Collectors.toList());
-
         Status status = Status.of(productDto.getStatus().name());
-
         return Product.builder()
                 .description(productDto.getDescription())
                 .url(productDto.getUrl())
