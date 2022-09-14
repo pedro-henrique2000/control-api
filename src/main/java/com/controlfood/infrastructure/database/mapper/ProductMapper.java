@@ -17,7 +17,7 @@ public class ProductMapper {
         List<TagModel> tagModels = product.getTags().stream().map(tag -> TagModel.valueOf(tag.name())).toList();
         ProductModel productModel = new ProductModel();
         productModel.setDescription(product.getDescription());
-        productModel.setId(productModel.getId());
+        productModel.setId(product.getId());
         productModel.setName(product.getName());
         productModel.setPrice(product.getPrice());
         productModel.setStatus(StatusModel.valueOf(product.getStatus().name()));
