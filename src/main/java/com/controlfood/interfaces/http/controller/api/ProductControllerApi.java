@@ -3,10 +3,7 @@ package com.controlfood.interfaces.http.controller.api;
 import com.controlfood.interfaces.http.dto.ProductDto;
 import com.controlfood.interfaces.http.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -19,5 +16,8 @@ public interface ProductControllerApi {
 
     @GetMapping()
     ResponseEntity<List<ProductResponse>> findAll();
+
+    @GetMapping("/{id}")
+    ResponseEntity<ProductResponse> findById(@PathVariable Long id);
 
 }

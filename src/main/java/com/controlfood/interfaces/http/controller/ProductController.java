@@ -1,7 +1,8 @@
 package com.controlfood.interfaces.http.controller;
 
-import com.controlfood.application.CreateProduct;
-import com.controlfood.application.FindAllProducts;
+import com.controlfood.application.product.CreateProduct;
+import com.controlfood.application.product.FindAllProducts;
+import com.controlfood.application.product.FindProductById;
 import com.controlfood.domain.entities.Product;
 import com.controlfood.interfaces.http.controller.api.ProductControllerApi;
 import com.controlfood.interfaces.http.dto.ProductDto;
@@ -21,6 +22,7 @@ public class ProductController implements ProductControllerApi {
     private final ProductDtoMapper productDtoMapper;
     private final CreateProduct createProduct;
     private final FindAllProducts findAllProducts;
+    private final FindProductById findProductById;
 
     public ResponseEntity<ProductResponse> saveProduct(ProductDto productDto) {
         Product product = createProduct.invoke(productDtoMapper.toEntity(productDto));
@@ -32,6 +34,12 @@ public class ProductController implements ProductControllerApi {
         List<Product> products = findAllProducts.invoke();
         List<ProductResponse> productResponses = products.stream().map(productDtoMapper::toProducResponse).toList();
         return ResponseEntity.ok(productResponses);
+    }
+
+    @Override
+    public ResponseEntity<ProductResponse> findById(Long id) {
+        Product product = findProductById.invoke(id);
+        return ResponseEntity.ok(productDtoMapper.toProducResponse(product));
     }
 
 }

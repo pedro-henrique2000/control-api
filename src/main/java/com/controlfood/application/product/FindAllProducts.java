@@ -1,4 +1,4 @@
-package com.controlfood.application;
+package com.controlfood.application.product;
 
 import com.controlfood.domain.entities.Product;
 import com.controlfood.domain.protocols.FindAllProductRepository;

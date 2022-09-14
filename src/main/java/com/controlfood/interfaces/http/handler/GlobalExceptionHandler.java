@@ -1,6 +1,7 @@
 package com.controlfood.interfaces.http.handler;
 
 import com.controlfood.domain.errors.BusinessException;
+import com.controlfood.domain.errors.ResourceNotFoundException;
 import com.controlfood.interfaces.http.exceptions.ExceptionDetails;
 import com.controlfood.interfaces.http.exceptions.ValidationExceptionDetails;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,18 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionDetails> handleResourceNotFoundException(final ResourceNotFoundException resourceNotFoundException) {
+        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .details(resourceNotFoundException.getMessage())
+                .title("Resource Not Found")
+                .timestamp(LocalDateTime.now())
+                .developerMessage(resourceNotFoundException.getClass().getName())
+                .build();
+        return ResponseEntity.unprocessableEntity().body(exceptionDetails);
+    }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ExceptionDetails> handleBusinessException(final BusinessException businessException) {

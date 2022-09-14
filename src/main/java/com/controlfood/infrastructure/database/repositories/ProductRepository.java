@@ -2,6 +2,7 @@ package com.controlfood.infrastructure.database.repositories;
 
 import com.controlfood.domain.entities.Product;
 import com.controlfood.domain.protocols.FindAllProductRepository;
+import com.controlfood.domain.protocols.FindByProductByIdRepository;
 import com.controlfood.domain.protocols.SaveProductRepository;
 import com.controlfood.infrastructure.database.mapper.ProductMapper;
 import com.controlfood.infrastructure.database.model.ProductModel;
@@ -13,12 +14,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ProductRepository implements SaveProductRepository, FindAllProductRepository {
+public class ProductRepository implements SaveProductRepository, FindAllProductRepository, FindByProductByIdRepository {
 
     private final ProductMapper productMapper;
     private final JpaProductRepository jpaProductRepository;
@@ -42,5 +44,14 @@ public class ProductRepository implements SaveProductRepository, FindAllProductR
         List<ProductModel> productModels = jpaProductRepository.findAll(isActiveSpec);
         log.info("Searched for all products");
         return productModels.stream().map(productMapper::toEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public Product findById(Long id) {
+        Optional<ProductModel> foundProduct = jpaProductRepository.findById(id);
+        if (foundProduct.isEmpty()) {
+            return null;
+        }
+        return productMapper.toEntity(foundProduct.get());
     }
 }
