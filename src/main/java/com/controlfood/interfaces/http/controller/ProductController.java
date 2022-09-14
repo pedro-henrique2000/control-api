@@ -1,19 +1,25 @@
 package com.controlfood.interfaces.http.controller;
 
+import com.controlfood.application.CreateProduct;
+import com.controlfood.domain.entities.Product;
 import com.controlfood.interfaces.http.controller.api.ProductControllerApi;
 import com.controlfood.interfaces.http.dto.ProductDto;
-import lombok.extern.slf4j.Slf4j;
+import com.controlfood.interfaces.http.dto.ProductResponse;
+import com.controlfood.interfaces.http.mapper.ProductDtoMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Slf4j
+@AllArgsConstructor
 public class ProductController implements ProductControllerApi {
 
-    public ResponseEntity<ProductDto> saveProduct(ProductDto productDto) {
-        //TODO: save
-        log.info("Received {}", productDto);
-        return ResponseEntity.ok(productDto);
+    private final ProductDtoMapper productDtoMapper;
+    private final CreateProduct createProduct;
+
+    public ResponseEntity<ProductResponse> saveProduct(ProductDto productDto) {
+        Product product = createProduct.invoke(productDtoMapper.toEntity(productDto));
+        return ResponseEntity.ok(productDtoMapper.toProducResponse(product));
     }
 
 }

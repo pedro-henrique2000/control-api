@@ -4,36 +4,28 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @NoArgsConstructor
-public class ProductDto {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class ProductResponse {
 
-    @NotBlank
+    private long id;
+
     private String name;
 
-    @Positive
-    @NotNull
     private int quantity;
 
-    @Size(min = 0, max = 255)
     private String description;
 
-    @Positive
-    @NotNull
     private BigDecimal price;
 
-    @Max(value = 255)
     private String url;
 
-    @NotNull
     private StatusDto status;
 
-    @NotEmpty
-    private List<@NotNull TagsDto> tags;
+    private List<TagsDto> tags;
 
 }

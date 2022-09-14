@@ -1,5 +1,7 @@
 package com.controlfood.interfaces.http.handler;
 
+import com.controlfood.domain.errors.BusinessException;
+import com.controlfood.interfaces.http.exceptions.ExceptionDetails;
 import com.controlfood.interfaces.http.exceptions.ValidationExceptionDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -7,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -19,6 +22,18 @@ import java.util.Map;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ExceptionDetails> handleBusinessException(final BusinessException businessException) {
+        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+                .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .details(businessException.getMessage())
+                .title("Business Exception")
+                .timestamp(LocalDateTime.now())
+                .developerMessage(businessException.getClass().getName())
+                .build();
+        return ResponseEntity.unprocessableEntity().body(exceptionDetails);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException methodArgumentNotValidException, HttpHeaders headers, HttpStatus status, WebRequest request) {

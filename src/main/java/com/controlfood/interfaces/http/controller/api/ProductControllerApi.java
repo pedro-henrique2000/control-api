@@ -1,6 +1,7 @@
 package com.controlfood.interfaces.http.controller.api;
 
 import com.controlfood.interfaces.http.dto.ProductDto;
+import com.controlfood.interfaces.http.dto.ProductResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +13,6 @@ import javax.validation.Valid;
 public interface ProductControllerApi {
 
     @PostMapping()
-    ResponseEntity<ProductDto> saveProduct(@Valid @RequestBody ProductDto productDto);
+    ResponseEntity<ProductResponse> saveProduct(@Valid @RequestBody ProductDto productDto);
 
 }
