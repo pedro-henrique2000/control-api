@@ -33,7 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .developerMessage(resourceNotFoundException.getClass().getName())
                 .build();
-        return ResponseEntity.unprocessableEntity().body(exceptionDetails);
+        return ResponseEntity.status(404).body(exceptionDetails);
     }
 
     @ExceptionHandler(BusinessException.class)
@@ -46,6 +46,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .developerMessage(businessException.getClass().getName())
                 .build();
         return ResponseEntity.unprocessableEntity().body(exceptionDetails);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ExceptionDetails> handleException(final Exception exception) {
+        ExceptionDetails exceptionDetails = ExceptionDetails.builder()
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .details(exception.getMessage())
+                .title("Internal Server Error")
+                .timestamp(LocalDateTime.now())
+                .developerMessage(exception.getClass().getName())
+                .build();
+        return ResponseEntity.internalServerError().body(exceptionDetails);
     }
 
     @Override
