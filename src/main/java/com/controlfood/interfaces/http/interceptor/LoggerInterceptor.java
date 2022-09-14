@@ -10,7 +10,7 @@ public class LoggerInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
-        RequestLogger.logRequest(request, null);
+        RequestLogger.logRequest(request);
         return true;
     }
 }

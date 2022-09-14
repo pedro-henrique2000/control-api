@@ -1,10 +1,10 @@
 package com.controlfood.interfaces.http.interceptor;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ public class RequestLogger {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void logRequest(HttpServletRequest httpServletRequest, Object body) throws JsonProcessingException {
+    public static void logRequest(HttpServletRequest httpServletRequest) throws IOException {
         try {
             Map<String, String> headers = buildHeaders(httpServletRequest);
             Map<String, String> parameters = buildParameterMap(httpServletRequest);
@@ -25,15 +25,12 @@ public class RequestLogger {
                 logMessage += " parameters=[ " + objectMapper.writeValueAsString(parameters) + "]";
             }
 
-            if (body != null) {
-                logMessage += " body=[ " + objectMapper.writeValueAsString(body) + "]";
-            }
-
             log.info(logMessage);
         } catch (Exception e) {
             throw e;
         }
     }
+
 
     private static Map<String, String> buildParameterMap(HttpServletRequest request) {
         Map<String, String> parameter = new HashMap<>();

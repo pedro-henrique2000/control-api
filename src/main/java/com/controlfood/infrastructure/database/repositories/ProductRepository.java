@@ -6,6 +6,7 @@ import com.controlfood.domain.protocols.SaveProductRepository;
 import com.controlfood.infrastructure.database.mapper.ProductMapper;
 import com.controlfood.infrastructure.database.model.ProductModel;
 import com.controlfood.infrastructure.database.repositories.jpa.JpaProductRepository;
+import com.controlfood.infrastructure.database.repositories.jpa.specifications.JpaProductSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -37,7 +38,8 @@ public class ProductRepository implements SaveProductRepository, FindAllProductR
 
     @Override
     public List<Product> findAll() {
-        List<ProductModel> productModels = jpaProductRepository.findAll();
+        JpaProductSpecification isActiveSpec = new JpaProductSpecification();
+        List<ProductModel> productModels = jpaProductRepository.findAll(isActiveSpec);
         log.info("Searched for all products");
         return productModels.stream().map(productMapper::toEntity).collect(Collectors.toList());
     }
