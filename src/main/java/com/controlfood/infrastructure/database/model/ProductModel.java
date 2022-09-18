@@ -15,7 +15,8 @@ import java.util.List;
 public class ProductModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_SEQ")
+    @SequenceGenerator(name = "PRODUCT_SEQ")
     private Long id;
 
     @Column(nullable = false, unique = true)

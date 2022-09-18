@@ -4,10 +4,12 @@ import com.controlfood.domain.entities.Product;
 import com.controlfood.domain.protocols.FindAllProductRepository;
 import com.controlfood.domain.protocols.FindByProductByIdRepository;
 import com.controlfood.domain.protocols.SaveProductRepository;
+import com.controlfood.domain.protocols.UpdateProductRepository;
 import com.controlfood.infrastructure.database.mapper.ProductMapper;
 import com.controlfood.infrastructure.database.model.ProductModel;
 import com.controlfood.infrastructure.database.repositories.jpa.JpaProductRepository;
 import com.controlfood.infrastructure.database.repositories.jpa.specifications.JpaProductSpecification;
+import com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,10 +19,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchOperation.*;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class ProductRepository implements SaveProductRepository, FindAllProductRepository, FindByProductByIdRepository {
+public class ProductRepository implements SaveProductRepository,
+        FindAllProductRepository,
+        FindByProductByIdRepository,
+        UpdateProductRepository {
+
+    private static final String STATUS = "status";
 
     private final ProductMapper productMapper;
     private final JpaProductRepository jpaProductRepository;
@@ -40,8 +49,8 @@ public class ProductRepository implements SaveProductRepository, FindAllProductR
 
     @Override
     public List<Product> findAll() {
-        JpaProductSpecification isActiveSpec = new JpaProductSpecification();
-        List<ProductModel> productModels = jpaProductRepository.findAll(isActiveSpec);
+        SearchCriteria searchCriteria = new SearchCriteria(STATUS, 1, EQUAL);
+        List<ProductModel> productModels = jpaProductRepository.findAll(getSpecification(searchCriteria));
         log.info("Searched for all products");
         return productModels.stream().map(productMapper::toEntity).collect(Collectors.toList());
     }
@@ -54,4 +63,15 @@ public class ProductRepository implements SaveProductRepository, FindAllProductR
         }
         return productMapper.toEntity(foundProduct.get());
     }
+
+    @Override
+    public Product update(Product product) {
+        return this.save(product);
+    }
+
+    private JpaProductSpecification getSpecification(SearchCriteria searchCriteria) {
+        return new JpaProductSpecification(List.of(searchCriteria));
+    }
+
+
 }

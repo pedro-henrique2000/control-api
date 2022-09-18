@@ -26,11 +26,11 @@ public class CreateOrder {
     }
 
     private Order createOrderEntity(OrderRequested orderRequested) {
-        List<OrderDetails> orderDetails = new ArrayList<>();
         Product product = findProductById.invoke(orderRequested.getProductId());
         if (product.getQuantity() < orderRequested.getQuantity()) {
             throw new BusinessException("Product Quantity not available!");
         }
+        List<OrderDetails> orderDetails = new ArrayList<>();
         orderDetails.add(OrderDetails.builder().product(product).quantity(orderRequested.getQuantity()).build());
         return Order.builder()
                 .orderDetails(orderDetails)

@@ -1,32 +1,28 @@
 package com.controlfood.interfaces.http.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@Data
+@Getter
+@AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
-
-    private Long id;
+public class ProductPartialDTO {
 
     @NotBlank
     private String name;
 
     @Positive
-    @NotNull
     private int quantity;
 
     @Size(min = 0, max = 255)
     private String description;
 
     @Positive
-    @NotNull
     private BigDecimal price;
 
     @Max(value = 255)
@@ -35,7 +31,6 @@ public class ProductDto {
     @NotNull
     private StatusDto status;
 
-    @NotEmpty
     private List<@NotNull TagsDto> tags;
 
 }

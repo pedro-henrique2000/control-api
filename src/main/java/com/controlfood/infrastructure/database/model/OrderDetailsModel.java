@@ -15,7 +15,8 @@ import java.util.Objects;
 public class OrderDetailsModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_DETAILS_SEQ")
+    @SequenceGenerator(name = "ORDER_DETAILS_SEQ")
     private Long id;
 
     @ManyToOne

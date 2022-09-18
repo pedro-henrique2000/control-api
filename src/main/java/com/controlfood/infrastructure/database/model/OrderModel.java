@@ -16,7 +16,8 @@ import java.util.List;
 public class OrderModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ORDER_SEQ")
+    @SequenceGenerator(name = "ORDER_SEQ")
     private Long id;
 
     @Column(nullable = false)
