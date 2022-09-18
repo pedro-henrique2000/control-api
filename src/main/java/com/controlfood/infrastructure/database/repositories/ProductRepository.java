@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchOperation.*;
+import static com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchOperation.EQUAL;
 
 @Component
 @RequiredArgsConstructor

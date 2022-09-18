@@ -3,7 +3,10 @@ package com.controlfood.interfaces.http.mapper;
 import com.controlfood.domain.entities.Product;
 import com.controlfood.domain.entities.Status;
 import com.controlfood.domain.entities.Tags;
-import com.controlfood.interfaces.http.dto.*;
+import com.controlfood.interfaces.http.dto.ProductDto;
+import com.controlfood.interfaces.http.dto.ProductResponse;
+import com.controlfood.interfaces.http.dto.StatusDto;
+import com.controlfood.interfaces.http.dto.TagsDto;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

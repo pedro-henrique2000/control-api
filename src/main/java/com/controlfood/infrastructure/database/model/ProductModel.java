@@ -1,6 +1,9 @@
 package com.controlfood.infrastructure.database.model;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +19,7 @@ public class ProductModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PRODUCT_SEQ")
-    @SequenceGenerator(name = "PRODUCT_SEQ")
+    @SequenceGenerator(name = "PRODUCT_SEQ", allocationSize = 20)
     private Long id;
 
     @Column(nullable = false, unique = true)

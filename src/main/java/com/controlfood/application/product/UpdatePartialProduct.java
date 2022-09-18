@@ -18,7 +18,7 @@ public class UpdatePartialProduct {
     private final UpdateProductRepository updateProductRepository;
     private final FindProductById findProductById;
 
-    public void invoke(Long id, ProductPartialDTO productPartialDTO) {
+    public void invoke(Long id, ProductPartialDTO productPartialDTO)  {
         Product product = findProductById.invoke(id);
         try {
             for (Method method : productPartialDTO.getClass().getDeclaredMethods()) {
@@ -31,7 +31,9 @@ public class UpdatePartialProduct {
             log.info("Updated partial product");
         } catch (Exception exception) {
             exception.printStackTrace();
+            //TODO: refactor
             throw new BusinessException("");
         }
     }
 }
+
