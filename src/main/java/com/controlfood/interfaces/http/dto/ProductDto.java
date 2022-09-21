@@ -1,5 +1,6 @@
 package com.controlfood.interfaces.http.dto;
 
+import com.controlfood.interfaces.http.dto.validator.ValidEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,10 +33,10 @@ public class ProductDto {
     @Max(value = 255)
     private String url;
 
-    @NotNull
+    @ValidEnum(enumType = StatusDto.class)
     private StatusDto status;
 
     @NotEmpty
-    private List<@NotNull TagsDto> tags;
+    private List<@ValidEnum(enumType = TagsDto.class) TagsDto> tags;
 
 }

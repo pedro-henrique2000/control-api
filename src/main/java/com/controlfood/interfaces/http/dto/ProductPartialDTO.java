@@ -1,5 +1,6 @@
 package com.controlfood.interfaces.http.dto;
 
+import com.controlfood.interfaces.http.dto.validator.ValidEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +29,9 @@ public class ProductPartialDTO {
     @Max(value = 255)
     private String url;
 
-    @NotNull
+    @ValidEnum(enumType = StatusDto.class)
     private StatusDto status;
 
-    private List<@NotNull TagsDto> tags;
+    private List<@ValidEnum(enumType = TagsDto.class) TagsDto> tags;
 
 }
