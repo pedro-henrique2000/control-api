@@ -8,6 +8,9 @@ import com.controlfood.interfaces.http.mapper.OrderDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,9 +20,16 @@ public class OrderController implements OrderControllerApi {
     private final OrderDtoMapper orderDtoMapper;
 
     @Override
-    public ResponseEntity<Object> createOrder(OrderDto orderDto) {
-        Order invoke = createOrder.invoke(orderDtoMapper.toEntity(orderDto));
-        return ResponseEntity.ok(invoke);
+    public ResponseEntity<Void> createOrder(OrderDto orderDto) {
+        Order order = createOrder.invoke(orderDtoMapper.toEntity(orderDto));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(order.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
 }

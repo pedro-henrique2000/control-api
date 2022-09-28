@@ -12,6 +12,6 @@ import javax.validation.Valid;
 public interface OrderControllerApi {
 
     @PostMapping
-    ResponseEntity<Object> createOrder(@Valid @RequestBody OrderDto orderDto);
+    ResponseEntity<Void> createOrder(@Valid @RequestBody OrderDto orderDto);
 
 }
