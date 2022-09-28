@@ -50,9 +50,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionDetails> handleException(final Exception exception) {
+        log.error("Unexpected error ocurred. Message: {}", exception.getMessage());
         ExceptionDetails exceptionDetails = ExceptionDetails.builder()
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .details(exception.getMessage())
+                .details("Unexpected error occurred.")
                 .title("Internal Server Error")
                 .timestamp(LocalDateTime.now())
                 .developerMessage(exception.getClass().getName())

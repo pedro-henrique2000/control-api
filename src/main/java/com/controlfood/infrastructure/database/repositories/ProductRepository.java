@@ -1,6 +1,7 @@
 package com.controlfood.infrastructure.database.repositories;
 
 import com.controlfood.domain.entities.Product;
+import com.controlfood.domain.entities.search.ProductSearch;
 import com.controlfood.domain.protocols.FindAllProductRepository;
 import com.controlfood.domain.protocols.FindByProductByIdRepository;
 import com.controlfood.domain.protocols.SaveProductRepository;
@@ -9,17 +10,16 @@ import com.controlfood.infrastructure.database.mapper.ProductMapper;
 import com.controlfood.infrastructure.database.model.ProductModel;
 import com.controlfood.infrastructure.database.repositories.jpa.JpaProductRepository;
 import com.controlfood.infrastructure.database.repositories.jpa.specifications.JpaProductSpecification;
+import com.controlfood.infrastructure.database.repositories.jpa.specifications.ProductSpecificationBuilder;
 import com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.controlfood.infrastructure.database.repositories.jpa.specifications.SearchOperation.EQUAL;
 
 @Component
 @RequiredArgsConstructor
@@ -29,9 +29,8 @@ public class ProductRepository implements SaveProductRepository,
         FindByProductByIdRepository,
         UpdateProductRepository {
 
-    private static final String STATUS = "status";
-
     private final ProductMapper productMapper;
+    private final ProductSpecificationBuilder productSpecificationBuilder;
     private final JpaProductRepository jpaProductRepository;
 
     @Override
@@ -41,16 +40,18 @@ public class ProductRepository implements SaveProductRepository,
             productModel = jpaProductRepository.save(productMapper.toModel(product));
             log.info("Saved a new product with id {}", productModel.getId());
             return productMapper.toEntity(productModel);
-        } catch (DataIntegrityViolationException exception) {
+        } catch (Exception exception) {
+            if (exception.getCause() instanceof ConstraintViolationException) {
+                return null;
+            }
             exception.printStackTrace();
-            return null;
+            throw exception;
         }
     }
 
     @Override
-    public List<Product> findAll() {
-        SearchCriteria searchCriteria = new SearchCriteria(STATUS, 1, EQUAL);
-        List<ProductModel> productModels = jpaProductRepository.findAll(getSpecification(searchCriteria));
+    public List<Product> findAll(final ProductSearch productSearch) {
+        List<ProductModel> productModels = jpaProductRepository.findAll(getSpecification(productSearch));
         log.info("Searched for all products");
         return productModels.stream().map(productMapper::toEntity).collect(Collectors.toList());
     }
@@ -69,8 +70,9 @@ public class ProductRepository implements SaveProductRepository,
         return this.save(product);
     }
 
-    private JpaProductSpecification getSpecification(SearchCriteria... searchCriteria) {
-        return new JpaProductSpecification(List.of(searchCriteria));
+    private JpaProductSpecification getSpecification(ProductSearch productSearch) {
+        List<SearchCriteria> criterias = productSpecificationBuilder.buildSearchCriterias(productSearch);
+        return new JpaProductSpecification(criterias);
     }
 
 

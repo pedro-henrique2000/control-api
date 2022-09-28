@@ -1,6 +1,7 @@
 package com.controlfood.application.product;
 
 import com.controlfood.domain.entities.Product;
+import com.controlfood.domain.entities.search.ProductSearch;
 import com.controlfood.domain.protocols.FindAllProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ public class FindAllProducts {
 
     private final FindAllProductRepository findAllProductRepository;
 
-    public List<Product> invoke() {
-        return findAllProductRepository.findAll();
+    public List<Product> invoke(ProductSearch productSearch) {
+        return findAllProductRepository.findAll(productSearch);
     }
 
 }

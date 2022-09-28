@@ -6,8 +6,11 @@ import com.controlfood.interfaces.http.controller.api.ProductControllerApi;
 import com.controlfood.interfaces.http.dto.ProductDto;
 import com.controlfood.interfaces.http.dto.ProductPartialDTO;
 import com.controlfood.interfaces.http.dto.ProductResponse;
+import com.controlfood.domain.entities.search.ProductSearch;
 import com.controlfood.interfaces.http.mapper.ProductDtoMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +18,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class ProductController implements ProductControllerApi {
 
     private final ProductDtoMapper productDtoMapper;
@@ -26,6 +31,7 @@ public class ProductController implements ProductControllerApi {
     private final FindProductById findProductById;
     private final UpdateProduct updateProduct;
     private final UpdatePartialProduct updatePartialProduct;
+    private final ObjectMapper objectMapper;
 
     @Override
     public ResponseEntity<Void> saveProduct(ProductDto productDto) {
@@ -41,8 +47,9 @@ public class ProductController implements ProductControllerApi {
     }
 
     @Override
-    public ResponseEntity<List<ProductResponse>> findAll() {
-        List<Product> products = findAllProducts.invoke();
+    public ResponseEntity<List<ProductResponse>> findAll(Map<String, Object> parameters) {
+        ProductSearch productSearch = objectMapper.convertValue(parameters, ProductSearch.class);
+        List<Product> products = findAllProducts.invoke(productSearch);
         List<ProductResponse> productResponses = products.stream().map(productDtoMapper::toProducResponse).toList();
         return ResponseEntity.ok(productResponses);
     }

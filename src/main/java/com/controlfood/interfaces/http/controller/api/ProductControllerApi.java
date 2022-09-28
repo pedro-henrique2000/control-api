@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("v1/api/products")
 public interface ProductControllerApi {
@@ -16,7 +17,7 @@ public interface ProductControllerApi {
     ResponseEntity<Void> saveProduct(@Valid @RequestBody ProductDto productDto);
 
     @GetMapping()
-    ResponseEntity<List<ProductResponse>> findAll();
+    ResponseEntity<List<ProductResponse>> findAll(@RequestParam Map<String, Object> parameters);
 
     @GetMapping("/{id}")
     ResponseEntity<ProductResponse> findById(@PathVariable Long id);
