@@ -13,7 +13,7 @@ import java.util.List;
 public interface ProductControllerApi {
 
     @PostMapping()
-    ResponseEntity<ProductResponse> saveProduct(@Valid @RequestBody ProductDto productDto);
+    ResponseEntity<Void> saveProduct(@Valid @RequestBody ProductDto productDto);
 
     @GetMapping()
     ResponseEntity<List<ProductResponse>> findAll();

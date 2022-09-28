@@ -69,7 +69,7 @@ public class ProductRepository implements SaveProductRepository,
         return this.save(product);
     }
 
-    private JpaProductSpecification getSpecification(SearchCriteria searchCriteria) {
+    private JpaProductSpecification getSpecification(SearchCriteria... searchCriteria) {
         return new JpaProductSpecification(List.of(searchCriteria));
     }
 
